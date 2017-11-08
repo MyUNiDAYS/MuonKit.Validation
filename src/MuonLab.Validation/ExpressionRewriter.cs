@@ -142,10 +142,10 @@ namespace MuonLab.Validation
 						BinaryExpression binExp = (BinaryExpression) expression;
 						Expression left = Walk(binExp.Left), right = Walk(binExp.Right);
 						return (left == null && right == null)
-						       	? null
-						       	: Expression.MakeBinary(
-						       		binExp.NodeType, left ?? binExp.Left, right ?? binExp.Right, binExp.IsLiftedToNull,
-						       		binExp.Method, binExp.Conversion);
+							   	? null
+							   	: Expression.MakeBinary(
+							   		binExp.NodeType, left ?? binExp.Left, right ?? binExp.Right, binExp.IsLiftedToNull,
+							   		binExp.Method, binExp.Conversion);
 					}
 				case ExpressionType.Not:
 				case ExpressionType.UnaryPlus:
@@ -159,9 +159,9 @@ namespace MuonLab.Validation
 						UnaryExpression unExp = (UnaryExpression) expression;
 						Expression operand = Walk(unExp.Operand);
 						return operand == null
-						       	? null
-						       	: Expression.MakeUnary(unExp.NodeType, operand,
-						       	                       unExp.Type, unExp.Method);
+							   	? null
+							   	: Expression.MakeUnary(unExp.NodeType, operand,
+							   						   unExp.Type, unExp.Method);
 					}
 				case ExpressionType.Conditional:
 					{
@@ -190,18 +190,18 @@ namespace MuonLab.Validation
 						Expression[] args = Walk(ne.Arguments);
 						if (HasValue(args)) return null;
 						return ne.Members == null
-						       	? Expression.New(ne.Constructor, CoalesceTerms(args, ne.Arguments))
-						       	: Expression.New(ne.Constructor, CoalesceTerms(args, ne.Arguments), ne.Members);
+							   	? Expression.New(ne.Constructor, CoalesceTerms(args, ne.Arguments))
+							   	: Expression.New(ne.Constructor, CoalesceTerms(args, ne.Arguments), ne.Members);
 					}
 				case ExpressionType.ListInit:
 					{
 						ListInitExpression lie = (ListInitExpression) expression;
 						NewExpression ctor = (NewExpression) Walk(lie.NewExpression);
 						var inits = lie.Initializers.Select(init => new
-						                                            	{
-						                                            		Original = init,
-						                                            		NewArgs = Walk(init.Arguments)
-						                                            	}).ToArray();
+																		{
+																			Original = init,
+																			NewArgs = Walk(init.Arguments)
+																		}).ToArray();
 						if (ctor == null && !inits.Any(init => HasValue(init.NewArgs))) return null;
 						ElementInit[] initArr = inits.Select(init => Expression.ElementInit(
 							init.Original.AddMethod, CoalesceTerms(init.NewArgs, init.Original.Arguments))).ToArray();

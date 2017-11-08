@@ -1,64 +1,57 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.String
 {
-	[TestFixture]
 	public class When_validating_a_property_as_not_equal_to
 	{
-		private TestClassValidator validator;
-		private TestClassValidatorWithNullValueParameter validatorWithTestClassValidatorWithNull;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-			this.validatorWithTestClassValidatorWithNull = new TestClassValidatorWithNullValueParameter();
-		}
-
-		[Test]
+		[Fact]
 		public async Task ensure_mismatch_fail_validation()
 		{
 			var testClass = new TestClass("HeLlo");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("error");
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_match_passes_validation()
 		{
 			var testClass = new TestClass("different");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_one_null_value_pass_validation()
 		{
 			var testClass = new TestClass(null);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_matching_null_values_fail_validation()
 		{
 			var testClass = new TestClass(null);
 
-			var validationReport = await this.validatorWithTestClassValidatorWithNull.Validate(testClass);
+			var validatorWithTestClassValidatorWithNull = new TestClassValidatorWithNullValueParameter();
+			var validationReport = await validatorWithTestClassValidatorWithNull.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("error");
 		}
 
-		private class TestClass
+		sealed class TestClass
 		{
 			public string value { get; set; }
 
@@ -68,7 +61,7 @@ namespace MuonLab.Validation.Tests.String
 			}
 		}
 
-		private class TestClassValidator : Validator<TestClass>
+		sealed class TestClassValidator : Validator<TestClass>
 		{
 			protected override void Rules()
 			{
@@ -76,7 +69,7 @@ namespace MuonLab.Validation.Tests.String
 			}
 		}
 
-		private class TestClassValidatorWithNullValueParameter : Validator<TestClass>
+		sealed class TestClassValidatorWithNullValueParameter : Validator<TestClass>
 		{
 			protected override void Rules()
 			{

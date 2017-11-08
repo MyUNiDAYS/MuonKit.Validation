@@ -1,60 +1,56 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.String
 {
-	[TestFixture]
+	
 	public class When_validating_a_property_for_minimum_length
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task ensure_nulls_fail_validation()
 		{
 			var testClass = new TestClass(null);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("MinLength");
 			validationReport.Violations.First().Error.Replacements["arg0"].ToString().ShouldEqual("5");
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_strings_that_are_too_short_fail_validation()
 		{
 			var testClass = new TestClass("1234");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("MinLength");
 			validationReport.Violations.First().Error.Replacements["arg0"].ToString().ShouldEqual("5");
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_strings_that_are_the_minimum_length_pass_validation()
 		{
 			var testClass = new TestClass("12345");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_strings_that_are_longer_than_the_minimum_length_pass_validation()
 		{
 			var testClass = new TestClass("123456");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
 		private class TestClass

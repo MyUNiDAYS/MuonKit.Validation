@@ -1,58 +1,51 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.String
 {
-	[TestFixture]
 	public class When_validating_a_property_as_equal_to
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task ensure_mismatch_fail_validation()
 		{
 			var testClass = new TestClass("different");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("error");
 		}
 
 
-		[Test]
+		[Fact]
 		public async Task ensure_match_passes_validation()
 		{
 			var testClass = new TestClass("HeLlO");
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
 
-		private class TestClass
+		sealed class TestClass
 		{
-			public string value { get; set; }
+			public string Value { get; set; }
 
 			public TestClass(string value)
 			{
-				this.value = value;
+				this.Value = value;
 			}
 		}
 
-		private class TestClassValidator : Validator<TestClass>
+		sealed class TestClassValidator : Validator<TestClass>
 		{
 			protected override void Rules()
 			{
-				Ensure(x => x.value.IsEqualTo("hello", StringComparison.InvariantCultureIgnoreCase, "error"));
+				Ensure(x => x.Value.IsEqualTo("hello", StringComparison.InvariantCultureIgnoreCase, "error"));
 			}
 		}
 	}

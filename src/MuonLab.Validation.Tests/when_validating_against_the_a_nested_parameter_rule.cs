@@ -1,23 +1,15 @@
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests
 {
-	[TestFixture]
+	
 	public class when_validating_against_the_a_nested_parameter_rule
 	{
-		private TestClassWrapperValidator validator;
-		private ValidationReport report;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassWrapperValidator();
-			this.report = this.validator.Validate(new TestClassWrapper()).Result;
-		}
-
-		[Test]
+		[Fact]
 		public void the_validation_report_should_be_invalid()
 		{
+			var validator = new TestClassWrapperValidator();
+			var report = validator.Validate(new TestClassWrapper()).Result;
 			report.IsValid.ShouldBeFalse();
 		}
 

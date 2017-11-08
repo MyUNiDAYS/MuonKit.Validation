@@ -1,15 +1,14 @@
 using System;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests
 {
-	[TestFixture]
+	
 	public abstract class given_a_test_class_with_data
 	{
 		private TestClass testClass;
 
-		[SetUp]
-		public void SetUp()
+		protected given_a_test_class_with_data()
 		{
 			this.testClass = new TestClass();
 			this.testClass.Age = 18;

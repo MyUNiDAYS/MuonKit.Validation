@@ -1,27 +1,20 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.Exceptions
 {
-	[TestFixture]
+	
 	public class When_failing_to_validate_a_parameter
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task ensure_exception_is_caught_and_reported()
 		{
 			var testClass = new TestClass();
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			var errorDescriptor = validationReport.Violations.First().Error;
 			errorDescriptor.Key.ShouldEqual("ValidationError");

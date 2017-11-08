@@ -1,38 +1,32 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.Boolean
 {
-	[TestFixture]
+	
 	public class When_validating_a_nullable_property_as_true
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task ensure_true_returns_true()
 		{
 			var testClass = new TestClass(true);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_false_returns_false()
 		{
 			var testClass = new TestClass(false);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-            var violations = validationReport.Violations.ToArray();
+			var violations = validationReport.Violations.ToArray();
 
 			violations[0].Error.Key.ShouldEqual("BeTrue");
 		}

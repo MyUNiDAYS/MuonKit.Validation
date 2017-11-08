@@ -1,48 +1,42 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.IComparable.Inequality
 {
-	[TestFixture]
 	public class When_validating_a_property_as_not_equal_to_a_nullable_scalar
 	{
-		TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task test_1_not_equals_4_returns_true()
 		{
 			var testClass = new TestClass(1);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-            Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task test_8_not_equals_4_returns_true()
 		{
 			var testClass = new TestClass(8);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-            Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task test_4_not_equals_4_returns_false()
 		{
 			var testClass = new TestClass(4);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-            validationReport.Violations.First().Error.Key.ShouldEqual("NotEqualTo");
+			validationReport.Violations.First().Error.Key.ShouldEqual("NotEqualTo");
 			validationReport.Violations.First().Error.Replacements["arg0"].ToString().ShouldEqual("4");
 		}
 

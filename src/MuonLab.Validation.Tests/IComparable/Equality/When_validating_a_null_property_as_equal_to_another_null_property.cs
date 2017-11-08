@@ -1,25 +1,18 @@
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.IComparable.Equality
 {
-	[TestFixture]
+	
 	public class When_validating_a_null_property_as_equal_to_another_null_property
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task should_be_valid()
 		{
 			var testClass = new TestClass();
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.IsValid.ShouldBeTrue();
 		}

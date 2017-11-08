@@ -1,42 +1,36 @@
 using System.Collections;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.Enumerables
 {
-	[TestFixture]
+	
 	public class when_validating_an_enumerable_contains_elements
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task an_empty_list_should_be_false()
 		{
 			var testClass = new TestClass();
 
-			var report = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			report.IsValid.ShouldBeFalse();
+			validationReport.IsValid.ShouldBeFalse();
 		}
 
 
-		[Test]
+		[Fact]
 		public async Task an_non_empty_list_should_be_true()
 		{
 			var testClass = new TestClass
-			                	{
-			                		List = new[] { "an item" }
-			                	};
+								{
+									List = new[] { "an item" }
+								};
 
-			var report = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			report.IsValid.ShouldBeTrue();
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
 		private class TestClass

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests
 {
 	class when_nesting_validation
 	{
-		[Test]
+		[Fact]
 		public async Task CorrectPropertyChainGenerated()
 		{
 			var outerClass = new OuterClass { InnerClass = new InnerClass { InnerInnerClass = new InnerInnerClass{ InnerInnerInnerClass = new InnerInnerInnerClass

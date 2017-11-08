@@ -1,37 +1,31 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.IComparable.Equality
 {
-	[TestFixture]
+	
 	public class When_validating_a_property_as_equal_to_another
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task test_1_equals_4_returns_false()
 		{
 			var testClass = new TestClass(1, 4);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("EqualTo");
 			validationReport.Violations.First().Error.Replacements["arg0"].ToString().ShouldEqual("Value2");
 		}
 
-		[Test]
+		[Fact]
 		public async Task test_4_equals_1_returns_false()
 		{
 			var testClass = new TestClass(4, 1);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			var violations = validationReport.Violations.ToArray();
 
@@ -39,14 +33,15 @@ namespace MuonLab.Validation.Tests.IComparable.Equality
 			validationReport.Violations.First().Error.Replacements["arg0"].ToString().ShouldEqual("Value2");
 		}
 
-		[Test]
+		[Fact]
 		public async Task test_2_equals_2_returns_true()
 		{
 			var testClass = new TestClass(2, 2);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
 		private class TestClass

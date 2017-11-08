@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.Enumerables
 {
 	public class When_validating_complex_types
 	{
-		[Test]
+		[Fact]
 		public async Task InnerViolationsShouldBeReportedCorrectly()
 		{
 			var testClass = new TestClass
-			                	{
-			                		List = new[] {new InnerClass(), new InnerClass {Name = "hello"}, new InnerClass()}
-			                	};
+								{
+									List = new[] {new InnerClass(), new InnerClass {Name = "hello"}, new InnerClass()}
+								};
 
 			var testClassValidator = new TestClassValidator();
 
@@ -29,10 +29,7 @@ namespace MuonLab.Validation.Tests.Enumerables
 			var error2 = ReflectionHelper.PropertyChainToString(violations[1].Property, '.');
 			error2.ShouldEqual("List[2].Name");
 		}
-
-
-
-
+		
 		public class TestClass
 		{
 			public IList<InnerClass> List { get; set; }

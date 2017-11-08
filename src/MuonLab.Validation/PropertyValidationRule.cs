@@ -40,8 +40,8 @@ namespace MuonLab.Validation
 			catch (NullReferenceException)
 			{
 				throw new ArgumentException("Unable to validate " + propExpr +
-				                            " some part of the chain is null.\n\nValidation Expression: " +
-				                            this.validationExpression + "\n\nEntity: " + entity);
+											" some part of the chain is null.\n\nValidation Expression: " +
+											this.validationExpression + "\n\nEntity: " + entity);
 			}
 			catch (Exception e)
 			{

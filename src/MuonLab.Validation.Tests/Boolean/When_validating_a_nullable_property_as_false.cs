@@ -1,56 +1,49 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.Boolean
 {
-	[TestFixture]
 	public class When_validating_a_nullable_property_as_false
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
+		class TestClass
 		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
-		public async Task ensure_false_returns_true()
-		{
-			var testClass = new TestClass(false);
-
-			var validationReport = await this.validator.Validate(testClass);
-
-			Assert.IsTrue(validationReport.IsValid);
-		}
-
-		[Test]
-		public async Task ensure_true_returns_false()
-		{
-			var testClass = new TestClass(true);
-
-			var validationReport = await this.validator.Validate(testClass);
-
-			validationReport.Violations.First().Error.Key.ShouldEqual("BeFalse");
-		}
-
-		private class TestClass
-		{
-			public bool? Value { get; }
-
 			public TestClass(bool value)
 			{
-				this.Value = value;
+				Value = value;
 			}
+				
+			public bool? Value { get; }
 		}
 
-		private class TestClassValidator : Validator<TestClass>
+		class TestClassValidator : Validator<TestClass>
 		{
 			protected override void Rules()
 			{
 				Ensure(x => x.Value.IsFalse());
 			}
+		}
+
+		[Fact]
+		public async Task ensure_false_returns_true()
+		{
+			var testClass = new TestClass(false);
+
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
+
+			validationReport.IsValid.ShouldBeTrue();
+		}
+
+		[Fact]
+		public async Task ensure_true_returns_false()
+		{
+			var testClass = new TestClass(true);
+
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
+
+			validationReport.Violations.First().Error.Key.ShouldEqual("BeFalse");
 		}
 	}
 }

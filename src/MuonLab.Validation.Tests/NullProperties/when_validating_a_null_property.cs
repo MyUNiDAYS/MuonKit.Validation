@@ -1,28 +1,20 @@
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.NullProperties
 {
-	[TestFixture]
 	public class when_validating_a_null_property
 	{
-		private TestClassValidator validator;
-		private ValidationReport report;
-
-		[SetUp]
-		public void SetUp()
+		[Fact]
+		public async Task the_validation_report_should_be_valid()
 		{
-			this.validator = new TestClassValidator();
-			this.report = this.validator.Validate(new TestClass()).Result;
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(new TestClass());
+
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
-		public void the_validation_report_should_be_valid()
-		{
-			report.IsValid.ShouldBeTrue();
-		}
-
-		public class TestClassValidator : Validator<TestClass>
+		class TestClassValidator : Validator<TestClass>
 		{
 			protected override void Rules()
 			{

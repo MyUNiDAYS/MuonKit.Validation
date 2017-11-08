@@ -1,57 +1,50 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.ReferenceType
 {
-	[TestFixture]
 	public class When_validating_a_property_as_not_null
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task ensure_not_null_returns_true()
 		{
 			var testClass = new TestClass(new object());
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task ensure_not_null_returns_false()
 		{
 			var testClass = new TestClass(null);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("Required");
 			validationReport.Violations.Skip(1).First().Error.Key.ShouldEqual("test key");
 		}
 
-		private class TestClass
+		sealed class TestClass
 		{
-			public object value { get; set; }
+			public object Value { get; set; }
 
 			public TestClass(object value)
 			{
-				this.value = value;
+				this.Value = value;
 			}
 		}
 
-		private class TestClassValidator : Validator<TestClass>
+		sealed class TestClassValidator : Validator<TestClass>
 		{
 			protected override void Rules()
 			{
-				Ensure(x => x.value.IsNotNull());
-				Ensure(x => x.value.IsNotNull("test key"));
+				Ensure(x => x.Value.IsNotNull());
+				Ensure(x => x.Value.IsNotNull("test key"));
 			}
 		}
 	}

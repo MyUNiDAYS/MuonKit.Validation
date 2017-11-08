@@ -5,25 +5,25 @@ using System.Reflection;
 namespace MuonLab.Validation
 {
 	internal static class ReflectionHelper
-    {
-        public static string PropertyChainToString(Expression expression, char delimeter)
-        {
-            if (expression is LambdaExpression)
-            {
-                var memberExpression = expression as LambdaExpression;
-                return DoPropertyChainToString(memberExpression.Body, delimeter).TrimEnd(delimeter);
-            }
+	{
+		public static string PropertyChainToString(Expression expression, char delimeter)
+		{
+			if (expression is LambdaExpression)
+			{
+				var memberExpression = expression as LambdaExpression;
+				return DoPropertyChainToString(memberExpression.Body, delimeter).TrimEnd(delimeter);
+			}
 
-            throw new NotSupportedException("Probably a nullable type, need implementing! Debug: `" + expression + "`");
-        }
+			throw new NotSupportedException("Probably a nullable type, need implementing! Debug: `" + expression + "`");
+		}
 
 		static string DoPropertyChainToString(Expression expression, char delimeter)
-        {
-            if (expression is MemberExpression)
-            {
-                var exp = expression as MemberExpression;
-                return DoPropertyChainToString(exp.Expression, delimeter) + exp.Member.Name + delimeter;
-            }
+		{
+			if (expression is MemberExpression)
+			{
+				var exp = expression as MemberExpression;
+				return DoPropertyChainToString(exp.Expression, delimeter) + exp.Member.Name + delimeter;
+			}
 
 			if(expression is MethodCallExpression)
 			{
@@ -35,7 +35,7 @@ namespace MuonLab.Validation
 					return DoPropertyChainToString((exp.Object as MemberExpression).Expression, delimeter) + (exp.Object as MemberExpression).Member.Name + "[" + index + "]" + delimeter;
 				}
 			}
-            return string.Empty;
-        }
-    }
+			return string.Empty;
+		}
+	}
 }

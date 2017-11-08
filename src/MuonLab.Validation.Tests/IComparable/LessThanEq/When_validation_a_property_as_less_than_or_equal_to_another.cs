@@ -1,49 +1,44 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.IComparable.LessThanEq
 {
-	[TestFixture]
+	
 	public class When_validation_a_property_as_less_than_or_equal_to_another
 	{
-		private TestClassValidator validator;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestClassValidator();
-		}
-
-		[Test]
+		[Fact]
 		public async Task test_1_less_than_or_equal_to_4_returns_true()
 		{
 			var testClass = new TestClass(1, 4);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
-		[Test]
+		[Fact]
 		public async Task test_4_less_than_or_equal_to_1_returns_false()
 		{
 			var testClass = new TestClass(4, 1);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
 			validationReport.Violations.First().Error.Key.ShouldEqual("LessThanEq");
 			validationReport.Violations.First().Error.Replacements["arg0"].ToString().ShouldEqual("Value2");
 		}
 
-		[Test]
+		[Fact]
 		public async Task test_2_less_than_or_equal_to_2_returns_true()
 		{
 			var testClass = new TestClass(2, 2);
 
-			var validationReport = await this.validator.Validate(testClass);
+			var validator = new TestClassValidator();
+			var validationReport = await validator.Validate(testClass);
 
-			Assert.IsTrue(validationReport.IsValid);
+			validationReport.IsValid.ShouldBeTrue();
 		}
 
 		private class TestClass

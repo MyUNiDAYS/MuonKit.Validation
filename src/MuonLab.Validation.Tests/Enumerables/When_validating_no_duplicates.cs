@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests.Enumerables
 {
 	public class When_validating_no_duplicates
 	{
-		[Test]
+		[Fact]
 		public async Task DuplicateRecordsShouldFail()
 		{
 			var testClass = new TestClass
@@ -35,7 +35,7 @@ namespace MuonLab.Validation.Tests.Enumerables
 			error2.ShouldEqual("List[1].DupeVal");
 		}
 
-		[Test]
+		[Fact]
 		public async Task PropertyChainShouldContainPrefixes()
 		{
 			var testContainer = new OuterTestClass
@@ -76,7 +76,7 @@ namespace MuonLab.Validation.Tests.Enumerables
 			error3.ShouldEqual("TestClasses[2].List[1].DupeVal");
 		}
 
-		[Test]
+		[Fact]
 		public async Task NonDuplicateRecordsShouldPass()
 		{
 			var testClass = new TestClass

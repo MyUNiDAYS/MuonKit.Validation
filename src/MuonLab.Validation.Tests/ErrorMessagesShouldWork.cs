@@ -1,25 +1,17 @@
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using Xunit;
 
 namespace MuonLab.Validation.Tests
 {
-	[TestFixture]
+	
 	public class ErrorMessagesShouldWork
 	{
-		TestValidator validator;
-		ValidationReport report;
-
-		[SetUp]
-		public void SetUp()
-		{
-			this.validator = new TestValidator();
-			this.report = this.validator.Validate(new TestClass { Age = 12 }).Result;
-		}
-
-		[Test]
+		[Fact]
 		public void the_validation_report_should_be_valid()
 		{
+			var validator = new TestValidator();
+			var report = validator.Validate(new TestClass { Age = 12 }).Result;
 			report.Violations.First().Error.Key.ShouldEqual("Key");
 		}
 
