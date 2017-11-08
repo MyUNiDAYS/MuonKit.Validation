@@ -12,7 +12,7 @@ namespace MuonLab.Validation.Tests.Boolean
 			{
 				Value = value;
 			}
-				
+
 			public bool? Value { get; }
 		}
 
