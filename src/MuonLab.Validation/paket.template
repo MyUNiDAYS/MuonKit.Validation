@@ -1,2 +1,4 @@
 ﻿type project
-
+authors Andrew Bullock
+projectUrl https://github.com/trullock/MuonLab.Validation
+include-pdbs true
